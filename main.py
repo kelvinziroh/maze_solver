@@ -1,25 +1,18 @@
 from graphics import *
-from cell import Cell
+from maze import Maze
 
 def main():
+
+    num_rows = 10
+    num_cols = 10
+    margin = 50
+    screen_x = 800
+    screen_y = 600
+    cell_size_x = (screen_x - 2 * margin) / num_cols
+    cell_size_y = (screen_y - 2 * margin) / num_rows
     win = Window(800, 600)
     
-    cell_1 = Cell(win)
-    cell_1.draw(50, 50, 100, 100)
-    
-    cell_2 = Cell(win)
-    cell_2.draw(100, 50, 150, 100)
-    
-    cell_3 = Cell(win)
-    cell_3.draw(100, 100, 150, 150)
-    
-    cell_4 = Cell(win)
-    cell_4.draw(50, 100, 100, 150)
-    
-    cell_1.draw_move(cell_2, False)
-    cell_2.draw_move(cell_3, True)
-    cell_3.draw_move(cell_4, False)
-    cell_4.draw_move(cell_1, True)
+    maze = Maze(margin, margin, num_rows, num_cols, cell_size_x, cell_size_y, win)
     
     win.wait_for_close()
 
