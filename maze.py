@@ -22,13 +22,11 @@ class Maze:
         self.cell_size_y = cell_size_y
         self.win = win
         self.__cells = []
-
-        self.__create_cells()
-        self.__break_entrance_and_exit()
-        
-        if seed is not None:
+        if seed:
             random.seed(seed)
         
+        self.__create_cells()
+        self.__break_entrance_and_exit()
         self.__break_walls_r(0, 0)
         self.__reset_cells_visited()
     
@@ -114,3 +112,36 @@ class Maze:
         for row in self.__cells:
             for cell in row:
                 cell.visited = False
+    
+    
+    def _solve_r(self, i, j):
+        self.__animate()
+        self.__cells[i][j].visited = True
+        if i == self.num_cols - 1 and j == self.num_rows - 1:
+            return True
+        
+        directions = []
+        
+        if i > 0 and not self.__cells[i - 1][j].visited and not self.__cells[i][j].has_left_wall:
+            directions.append((i - 1, j))
+        if i < self.num_cols - 1 and not self.__cells[i + 1][j].visited and not self.__cells[i][j].has_right_wall:
+            directions.append((i + 1, j))
+        if j > 0 and not self.__cells[i][j - 1].visited and not self.__cells[i][j].has_top_wall:
+            directions.append((i, j - 1))
+        if j < self.num_rows - 1 and not self.__cells[i][j + 1].visited and not self.__cells[i][j].has_bottom_wall:
+            directions.append((i, j + 1))
+        
+        for direction in directions:
+            next_i = direction[0]
+            next_j = direction[1]
+            self.__cells[i][j].draw_move(self.__cells[next_i][next_j])
+            next_cell = self._solve_r(next_i, next_j)
+            if next_cell:
+                return True
+            else:
+                self.__cells[i][j].draw_move(self.__cells[next_i][next_j], True)
+        
+        return False
+    
+    def solve(self):
+        return self._solve_r(0, 0)
