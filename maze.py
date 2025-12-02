@@ -135,8 +135,7 @@ class Maze:
             next_i = direction[0]
             next_j = direction[1]
             self.__cells[i][j].draw_move(self.__cells[next_i][next_j])
-            next_cell = self._solve_r(next_i, next_j)
-            if next_cell:
+            if self._solve_r(next_i, next_j):
                 return True
             else:
                 self.__cells[i][j].draw_move(self.__cells[next_i][next_j], True)
